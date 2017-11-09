@@ -13,11 +13,17 @@ namespace Game15
     public partial class FormGame15 : Form
     {
         Game game;
+        const int game_size = 4;
+        Button[] buttons;
 
         public FormGame15()
         {
             InitializeComponent();
-            game = new Game(4);
+            buttons = new Button[game_size * game_size] { button0,  button1,  button2,  button3,
+                                                          button4,  button5,  button6,  button7,
+                                                          button8,  button9,  button10, button11,
+                                                          button12, button13, button14, button15 };
+            game = new Game(game_size);
         }
 
         private void button0_Click(object sender, EventArgs e)
@@ -29,30 +35,6 @@ namespace Game15
             {
                 MessageBox.Show("Congratulations, you won!");
                 start_game();
-        }
-        }
-
-        private Button button (int position)
-        {
-            switch (position)
-            {
-                case 0: return button0;
-                case 1: return button1;
-                case 2: return button2;
-                case 3: return button3;
-                case 4: return button4;
-                case 5: return button5;
-                case 6: return button6;
-                case 7: return button7;
-                case 8: return button8;
-                case 9: return button9;
-                case 10: return button10;
-                case 11: return button11;
-                case 12: return button12;
-                case 13: return button13;
-                case 14: return button14;
-                case 15: return button15;
-                default: return null;
             }
         }
 
@@ -78,9 +60,9 @@ namespace Game15
         {
             for (int position = 0; position < 16; position++)
             {
-                int nr = game.get_number(position);
-                button(position).Text = nr.ToString();
-                button(position).Visible = (nr > 0);
+                int number = game.get_number(position);
+                buttons[position].Text = number.ToString();
+                buttons[position].Visible = (number > 0);
             }
         }
     }
