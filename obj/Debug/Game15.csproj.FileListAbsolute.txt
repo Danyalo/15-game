@@ -8,3 +8,13 @@ D:\C# Practice for Programming Guys\Project 3 - 15 Game\Game15\obj\Debug\Game15.
 D:\C# Practice for Programming Guys\Project 3 - 15 Game\Game15\obj\Debug\Game15.csproj.CoreCompileInputs.cache
 D:\C# Practice for Programming Guys\Project 3 - 15 Game\Game15\obj\Debug\Game15.exe
 D:\C# Practice for Programming Guys\Project 3 - 15 Game\Game15\obj\Debug\Game15.pdb
+D:\C# Practice for Programming Guys\Project 3 - 15 Game\15-game\bin\Debug\Game15.exe.config
+D:\C# Practice for Programming Guys\Project 3 - 15 Game\15-game\bin\Debug\Game15.exe
+D:\C# Practice for Programming Guys\Project 3 - 15 Game\15-game\bin\Debug\Game15.pdb
+D:\C# Practice for Programming Guys\Project 3 - 15 Game\15-game\obj\Debug\Game15.csprojResolveAssemblyReference.cache
+D:\C# Practice for Programming Guys\Project 3 - 15 Game\15-game\obj\Debug\Game15.FormGame15.resources
+D:\C# Practice for Programming Guys\Project 3 - 15 Game\15-game\obj\Debug\Game15.Properties.Resources.resources
+D:\C# Practice for Programming Guys\Project 3 - 15 Game\15-game\obj\Debug\Game15.csproj.GenerateResource.Cache
+D:\C# Practice for Programming Guys\Project 3 - 15 Game\15-game\obj\Debug\Game15.csproj.CoreCompileInputs.cache
+D:\C# Practice for Programming Guys\Project 3 - 15 Game\15-game\obj\Debug\Game15.exe
+D:\C# Practice for Programming Guys\Project 3 - 15 Game\15-game\obj\Debug\Game15.pdb
