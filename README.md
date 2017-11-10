@@ -1,6 +1,8 @@
 # Young man's 15 puzzle game
 A simple game to kill some time & learn some C#
 
+Featuring ugly design, crappy pragramming solutions and lots of fun
+
 # Changelog:
 
 ## Version 1.0
