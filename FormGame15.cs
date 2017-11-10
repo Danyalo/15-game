@@ -14,6 +14,7 @@ namespace Game15
         Button[] buttons;
         Image puzzle;
         Bitmap[] plates;
+        bool show_numbers;
 
         public FormGame15()
         {
@@ -23,46 +24,31 @@ namespace Game15
                                                           button8,  button9,  button10, button11,
                                                           button12, button13, button14, button15 };
             game = new Game(game_size);
+            show_numbers = false;
+            Load_puzzle();
         }
 
-        private void Load_puzzle(string path = "codeboys.jpg")
+        /// <summary>
+        /// Starts a new game session with current picture
+        /// </summary>
+        private void Start_game()
         {
-            if (String.Compare(path, "codeboys.jpg") == 0)
-            {
-                path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, path);
-            }
-            puzzle = Image.FromFile(path);
-            puzzle = ResizeImage(puzzle, tableLayoutPanel1.Width, tableLayoutPanel1.Height);
-
-            help.Image = puzzle;
-
-            plates = new Bitmap[game_size * game_size];
-
-            int widthPart = (int)((double)puzzle.Width / game_size + 0.5);
-            int heightPart = (int)((double)puzzle.Height / game_size + 0.5);
-            
-            for (int i = 0; i < game_size; i++)
-            {
-                for (int j = 0; j < game_size; j++)
-                {
-                    plates[i*game_size + j] = new Bitmap(widthPart, heightPart);
-                    Graphics g = Graphics.FromImage(plates[i * game_size + j]);
-                    g.DrawImage(puzzle, new Rectangle(0, 0, widthPart, heightPart), new Rectangle(j * widthPart, i * heightPart, widthPart, heightPart), GraphicsUnit.Pixel);
-                    g.Dispose();
-                }
-            }
-
-            for (int i = 0; i < game_size * game_size; i++)
-            {
-                buttons[i].Image = plates[i];
-            }
+            game.Start();
+            for (int i = 0; i < 1000; i++)
+                game.Shift_random();
+            Refresh_table();
         }
 
+        /// <summary>
+        /// Handles clicks on table tiles
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button0_Click(object sender, EventArgs e)
         {
             int position = Convert.ToInt16(((Button)sender).Tag);
             game.Shift(position);
-            Refresh();
+            Refresh_table();
             if (game.Check_numbers())
             {
                 MessageBox.Show("Congratulations, you won!");
@@ -70,42 +56,97 @@ namespace Game15
             }
         }
 
-        private void Menu_start_Click(object sender, EventArgs e)
-        {
-            Start_game();
-        }
-
+        /// <summary>
+        /// Handles initial game session
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormGame15_Load(object sender, EventArgs e)
         {
             Start_game();
         }
 
-        private void showImage_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Handles New Game menu button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NewGame_Click(object sender, EventArgs e)
+        {
+            Start_game();
+        }
+
+        /// <summary>
+        /// Handles the Import Image menu button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ImportImage_Click(object sender, EventArgs e)
+        {
+            DialogResult path = openFileDialog1.ShowDialog();
+
+            if (path == DialogResult.OK)
+            {
+                string picture = openFileDialog1.FileName;
+                try
+                {
+                    Load_puzzle(picture);
+                    Start_game();
+                }
+                catch (IOException)
+                {
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles Show Image menu button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ShowImage_Click(object sender, EventArgs e)
         {
             help.Show();
         }
 
-        private void help_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Hides the complete image upon click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Help_Click(object sender, EventArgs e)
         {
             help.Hide();
         }
 
-        private void Start_game()
+        /// <summary>
+        /// Handles Show Numbers checkbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ShowNumbers_Click(object sender, EventArgs e)
         {
-            game.Start();
-            Load_puzzle();
-            for (int i = 0; i < 1000; i++)
-                game.Shift_random();
-            Refresh();
+            show_numbers = !show_numbers;
+            Refresh_table();
         }
 
-        private void Refresh()
+        /// <summary>
+        /// Updates the tile images and numbers according to game logic module
+        /// </summary>
+        private void Refresh_table()
         {
             for (int position = 0; position < game_size * game_size; position++)
             {
                 int number = game.Get_number(position);
 
-                //buttons[position].Text = number.ToString();       // for casualfags
+                if (show_numbers)
+                {
+                    buttons[position].Text = number.ToString();
+                }
+                else
+                {
+                    buttons[position].ResetText();
+                }
 
                 if (number == 0)
                 {
@@ -116,6 +157,52 @@ namespace Game15
                     buttons[position].Image = plates[number - 1];
                     buttons[position].Visible = true;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Loads the image into the program, scales it and cuts into tiles
+        /// </summary>
+        /// <param name="path"></param>
+        private void Load_puzzle(string path = "codeboys.jpg")
+        {
+            if (String.Compare(path, "codeboys.jpg") == 0)
+            {
+                path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, path);
+            }
+
+            try
+            {
+                puzzle = Image.FromFile(path);
+            }
+            catch (System.OutOfMemoryException)
+            {
+                MessageBox.Show("This file is not supported by the program. Please choose another image file.");
+            }
+            
+            puzzle = ResizeImage(puzzle, tableLayoutPanel1.Width, tableLayoutPanel1.Height);
+
+            help.Image = puzzle;
+
+            plates = new Bitmap[game_size * game_size];
+
+            int widthPart = (int)((double)puzzle.Width / game_size + 0.5);
+            int heightPart = (int)((double)puzzle.Height / game_size + 0.5);
+
+            for (int i = 0; i < game_size; i++)
+            {
+                for (int j = 0; j < game_size; j++)
+                {
+                    plates[i * game_size + j] = new Bitmap(widthPart, heightPart);
+                    Graphics g = Graphics.FromImage(plates[i * game_size + j]);
+                    g.DrawImage(puzzle, new Rectangle(0, 0, widthPart, heightPart), new Rectangle(j * widthPart, i * heightPart, widthPart, heightPart), GraphicsUnit.Pixel);
+                    g.Dispose();
+                }
+            }
+
+            for (int i = 0; i < game_size * game_size; i++)
+            {
+                buttons[i].Image = plates[i];
             }
         }
 
